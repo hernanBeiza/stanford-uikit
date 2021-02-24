@@ -1,4 +1,4 @@
-# 02 MVVM
+# 02 MVVM and the Swift Type System
 
 - MVVM Design Paradigm
 - Tipos
