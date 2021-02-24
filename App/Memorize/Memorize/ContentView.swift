@@ -8,14 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
+    var viewModel:EmojiMemoryGame;
+    
     var body: some View {
         //Vista combinada
-        return HStack{
-            //No incluye el 4
-            ForEach(0..<4, content:{ index in
+        return HStack {
+            //Para poder usar directamente un modelo en un ForEach, necesita usar el protocolo Identifiable
+            ForEach(viewModel.cards) { card in
                 //Definir el valor de esta variable
-                CardView(isFaceUp: true)
-            })
+                CardView(card:card).onTapGesture {
+                    viewModel.choose(card: card)
+                };
+            }
         }
         .padding()
         .foregroundColor(.orange)
@@ -24,14 +28,14 @@ struct ContentView: View {
 
 struct CardView: View {
     //Si la variable no tiene valor o no es inicializada, al instanciar el objeto pedirá el valor como argumento
-    var isFaceUp:Bool
+    var card:MemoryGame<String>.Card
     var body: some View {
         //Vista combinada
         ZStack{
-            if isFaceUp {
+            if card.isFaceUp {
                 RoundedRectangle(cornerRadius: 10.0).fill(Color.white)
                 RoundedRectangle(cornerRadius: 10.0).stroke(lineWidth: 3)
-                Text("👻").font(Font.largeTitle)
+                Text(card.content).font(Font.largeTitle)
             } else {
                 RoundedRectangle(cornerRadius: 10.0).fill()
             }
@@ -41,6 +45,6 @@ struct CardView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        ContentView(viewModel: EmojiMemoryGame())
     }
 }

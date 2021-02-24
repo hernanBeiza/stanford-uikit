@@ -3,4 +3,7 @@
 
 [TOC]
 
-## 01
+## 01 Course Logitistics and Introduction to SwiftUI
+
+## 02 MVVM
+
