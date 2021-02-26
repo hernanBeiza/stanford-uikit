@@ -12,13 +12,12 @@ struct EmojiMemoryGameView: View {
     
     var body: some View {
         //Vista combinada
-        return HStack {
-            //Para poder usar directamente un modelo en un ForEach, necesita usar el protocolo Identifiable
-            ForEach(viewModel.cards) { card in
-                //Definir el valor de esta variable
-                CardView(card:card).onTapGesture {
-                    viewModel.choose(card: card)
-                };
+        return Grid(items:viewModel.cards) { card in
+            //Definir el valor de esta variable
+            CardView(card:card).onTapGesture {
+                self.viewModel.choose(card: card)
+                //con self se puede escapar, salir del error de llamados redundantes
+                //de memoria
             }
         }
         .padding()
@@ -44,7 +43,9 @@ struct CardView: View {
                 RoundedRectangle(cornerRadius: cornerRadius).stroke(lineWidth: edgeLineWidth)
                 Text(card.content)
             } else {
-                RoundedRectangle(cornerRadius: cornerRadius).fill()
+                if !card.isMatched {
+                    RoundedRectangle(cornerRadius: cornerRadius).fill()
+                }
             }
         }
         .font(Font.system(size: fontrSize(for: size)))
