@@ -8,6 +8,7 @@
 import SwiftUI
 
 struct EmojiMemoryGameView: View {
+    //No puede ser private, porque debe ser seteada desde afuera
     @ObservedObject var viewModel:EmojiMemoryGame;
     
     var body: some View {
@@ -27,40 +28,44 @@ struct EmojiMemoryGameView: View {
 
 struct CardView: View {
     //Si la variable no tiene valor o no es inicializada, al instanciar el objeto pedirá el valor como argumento
+    //No puede ser private, porque necesita ser seteada en el constructor
     var card:MemoryGame<String>.Card
+    //Access Control
+    //No puede ser private, porque el sistema la necesita
     var body: some View {
         GeometryReader(content: { geometry in
             //Implementación para solucionar el bug antiguo de self dentro de llamado de una función inline
             self.body(for: geometry.size)
         })
     }
-    
-    func body(for size:CGSize) -> some View {
+
+    // Ahora es una lista de Vistas
+    @ViewBuilder
+    private func body(for size:CGSize) -> some View {
         //Vista combinada
-        ZStack{
-            if card.isFaceUp {
-                RoundedRectangle(cornerRadius: cornerRadius).fill(Color.white)
-                RoundedRectangle(cornerRadius: cornerRadius).stroke(lineWidth: edgeLineWidth)
+        if card.isFaceUp || !card.isMatched {
+            ZStack {
+                Pie(startAngle:Angle.degrees(-90),endAngle: Angle.degrees(110-90), clockwise: true).padding(5).opacity(0.4)
                 Text(card.content)
-            } else {
-                if !card.isMatched {
-                    RoundedRectangle(cornerRadius: cornerRadius).fill()
-                }
+                .font(Font.system(size: fontSize(for: size)))
             }
+            //.modifier(Cardify(isFaceUp:card.isFaceUp))
+            //Se puede usar así gracias a la extension en Cardify
+            .cardify(isFaceUp: card.isFaceUp)
         }
-        .font(Font.system(size: fontrSize(for: size)))
+        //Ahora se puede retornar un EmptyView al usar la anotación ViewBuilder
     }
         
     // MARK: - Drawing Constants
-    let cornerRadius:CGFloat = 10.0;
-    let edgeLineWidth:CGFloat = 3.0;
-    func fontrSize(for size: CGSize) -> CGFloat {
-        return min(size.width, size.height) * 0.75;
+    private func fontSize(for size: CGSize) -> CGFloat {
+        return min(size.width, size.height) * 0.7;
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        EmojiMemoryGameView(viewModel: EmojiMemoryGame())
+        let game = EmojiMemoryGame();
+        game.choose(card: game.cards[0]);
+        return EmojiMemoryGameView(viewModel: game)
     }
 }
