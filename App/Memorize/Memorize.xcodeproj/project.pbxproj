@@ -77,10 +77,10 @@
 				274E02AB25E84B5F00AAC3CF /* GridLayout.swift */,
 				279AD60225E7125700B900D1 /* MemorizeApp.swift */,
 				27E2741925E9A799009FFCFE /* Pie.swift */,
+				27E2742125E9D1FA009FFCFE /* Cardify.swift */,
 				279AD60625E7125900B900D1 /* Assets.xcassets */,
 				279AD60B25E7125900B900D1 /* Info.plist */,
 				279AD60825E7125900B900D1 /* Preview Content */,
-				27E2742125E9D1FA009FFCFE /* Cardify.swift */,
 			);
 			path = Memorize;
 			sourceTree = "<group>";

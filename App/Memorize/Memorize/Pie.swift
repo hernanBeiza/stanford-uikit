@@ -7,11 +7,23 @@
 
 import SwiftUI
 
+// Todas las Shapes implementan Animatable
 struct Pie: Shape {
     
     var startAngle:Angle;
     var endAngle:Angle;
     var clockwise:Bool = false;
+    
+    // Para animar dos propiedades a la vez
+    var animatableData: AnimatablePair<Double, Double> {
+        get {
+            AnimatablePair(startAngle.radians, endAngle.radians);
+        }
+        set {
+            startAngle = Angle.radians(newValue.first);
+            endAngle = Angle.radians(newValue.second);
+        }
+    }
     
     func path(in rect: CGRect) -> Path {
         var p = Path();

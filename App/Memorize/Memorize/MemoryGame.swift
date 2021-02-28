@@ -59,10 +59,11 @@ struct MemoryGame <CardContent> where CardContent: Equatable {
             cards.append(Card(id:pairIndex*2, isFaceUp:false, isMatched:false, content: content));
             cards.append(Card(id:pairIndex*2+1, isFaceUp:false, isMatched:false, content: content));
         }
+        cards.shuffle()
     }
     
     mutating func choose (card:Card) -> Void {
-        print("Card choosen: \(card)")
+        //print("Card choosen: \(card)")
         // Unwrapping optional
         // Coma es un secuencial AND, no se usa && cuando se está unwrapping un optional
         if let chosenIndex: Int = self.cards.firstIndex(matching: card), !cards[chosenIndex].isFaceUp, !cards[chosenIndex].isMatched {
@@ -81,15 +82,73 @@ struct MemoryGame <CardContent> where CardContent: Equatable {
             }
         }
     }
-    //Nesting Struct, struct inside struct. Pasar usar MemoryGame.Card
+    
+    //Nesting Struct, struct inside struct. Para usar MemoryGame.Card
     //Cada vez que se pasa un ValueType, es copiada cada vez que se pasa como parámetro
     //@Protocol
     struct Card: Identifiable {
         var id: Int;
-        var isFaceUp: Bool;
-        var isMatched: Bool;
+        // Es más fácil manejar estos llamados acá y evitar errores
+        var isFaceUp: Bool = false {
+            didSet {
+                if isFaceUp {
+                    startUsingBonusTime()
+                } else {
+                    stopUsingBonusTime()
+                }
+            }
+        }
+        // Es más fácil manejar estos llamados acá y evitar errores
+        var isMatched: Bool = false {
+            didSet {
+                stopUsingBonusTime();
+            }
+            
+        }
         //var content: String;
         var content: CardContent; //Don't care type
+        
+        
+        // MARK: Bonus Time
+        
+        var bonusTimeLimit: TimeInterval = 6;
+        
+        var lastFaceUpDate: Date?
+        var pastFaceUpTime: TimeInterval = 0;
+
+        private var faceUpTime: TimeInterval {
+            if let lastFaceUpDate = self.lastFaceUpDate {
+                return pastFaceUpTime + Date().timeIntervalSince(lastFaceUpDate);
+            } else {
+                return pastFaceUpTime;
+            }
+        }
+        
+        var bonusTimeRemaining: TimeInterval {
+            max(0,bonusTimeLimit - faceUpTime);
+        }
+        var bonusRemaining:Double {
+            (bonusTimeLimit > 0 && bonusTimeRemaining > 0 ) ? bonusTimeRemaining/bonusTimeLimit : 0
+        }
+        var hasEarnedBonus : Bool {
+            isMatched && bonusTimeRemaining > 0
+        }
+        
+        var isConsumingBonusTime : Bool {
+            isFaceUp && !isMatched && bonusTimeRemaining > 0
+        }
+        
+        private mutating func startUsingBonusTime() {
+            if isConsumingBonusTime, lastFaceUpDate == nil {
+                lastFaceUpDate = Date();
+            }
+        }
+        
+        private mutating func stopUsingBonusTime() {
+            pastFaceUpTime = faceUpTime;
+            self.lastFaceUpDate = nil;
+        }
+        
     }
     
 }

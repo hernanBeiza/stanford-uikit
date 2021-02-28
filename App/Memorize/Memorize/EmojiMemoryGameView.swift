@@ -13,16 +13,25 @@ struct EmojiMemoryGameView: View {
     
     var body: some View {
         //Vista combinada
-        return Grid(items:viewModel.cards) { card in
+        Grid(items:viewModel.cards) { card in
             //Definir el valor de esta variable
             CardView(card:card).onTapGesture {
-                self.viewModel.choose(card: card)
-                //con self se puede escapar, salir del error de llamados redundantes
-                //de memoria
+                //Animará todo. Por defecto está la opacidad
+                withAnimation(.linear(duration:0.75)){
+                    self.viewModel.choose(card: card)
+                    //con self se puede escapar, salir del error de llamados redundantes
+                    //de memoria
+                }
             }
         }
         .padding()
-        .foregroundColor(.orange)
+        .foregroundColor(Color.orange)
+        //Se adapta a la plataforma automáticamente
+        Button(action: {
+            withAnimation(.easeInOut) {
+                self.viewModel.resetGame();
+            }
+        }, label: { Text("New Game"); });
     }
 }
 
@@ -38,24 +47,49 @@ struct CardView: View {
             self.body(for: geometry.size)
         })
     }
-
+    
+    // Variables para trackear los valores del modelo y mantener la vista sincronizada con él
+    @State private var animatedBonusRemaining : Double = 0;
+    //Función para mantener sincronizado los valores de la tarjeta, del modelo, con esta vista
+    private func startBonusTimeAnimation() {
+        animatedBonusRemaining = card.bonusRemaining;
+        withAnimation(.linear(duration: card.bonusTimeRemaining)) {
+            animatedBonusRemaining = 0;
+        }
+    }
+    
     // Ahora es una lista de Vistas
     @ViewBuilder
     private func body(for size:CGSize) -> some View {
         //Vista combinada
         if card.isFaceUp || !card.isMatched {
             ZStack {
-                Pie(startAngle:Angle.degrees(-90),endAngle: Angle.degrees(110-90), clockwise: true).padding(5).opacity(0.4)
+                Group {
+                    if card.isConsumingBonusTime {
+                        Pie(startAngle:Angle.degrees(-90),endAngle: Angle.degrees(-animatedBonusRemaining*360-90), clockwise: true).padding(5).opacity(0.4)
+                            .onAppear {
+                                //Llama este clousure cada vez que aparece en apantalla
+                                startBonusTimeAnimation()
+                            }
+                    } else{
+                        Pie(startAngle:Angle.degrees(-90),endAngle: Angle.degrees(-card.bonusRemaining*360-90), clockwise: true).padding(5).opacity(0.4)
+                    }
+                }
+                .padding(5).opacity(0.4).transition(.identity)
                 Text(card.content)
                 .font(Font.system(size: fontSize(for: size)))
+                    .rotationEffect(Angle.degrees(card.isMatched ? 360:0))
+                    .animation(card.isMatched ? Animation.linear(duration:1).repeatForever(autoreverses: false) : .default)
             }
             //.modifier(Cardify(isFaceUp:card.isFaceUp))
             //Se puede usar así gracias a la extension en Cardify
             .cardify(isFaceUp: card.isFaceUp)
+            //Las animaciones ocurren todas al mismo tiempo
+            .transition(AnyTransition.scale)
         }
         //Ahora se puede retornar un EmptyView al usar la anotación ViewBuilder
     }
-        
+    
     // MARK: - Drawing Constants
     private func fontSize(for size: CGSize) -> CGFloat {
         return min(size.width, size.height) * 0.7;

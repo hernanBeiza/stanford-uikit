@@ -3,6 +3,7 @@
 - CS193P
 - Spring 2020
 - https://cs193p.sites.stanford.edu/
+- https://www.youtube.com/watch?v=oDKDGCRdSHc&ab_channel=Stanford
 
 ## Topics
 
