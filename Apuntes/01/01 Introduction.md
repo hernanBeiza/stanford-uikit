@@ -1,5 +1,10 @@
 # 01 Course Logitistics and Introduction to SwiftUI
 
+- CS193P
+- Spring 2020
+- https://cs193p.sites.stanford.edu/
+- https://www.youtube.com/watch?v=jbtqIBpUG7g&feature=youtu.be&ab_channel=Stanford
+
 ## Creando proyecto
 
 - Demos: Muchos

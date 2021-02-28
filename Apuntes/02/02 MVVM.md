@@ -1,5 +1,11 @@
 # 02 MVVM and the Swift Type System
 
+- CS193P
+- Spring 2020
+  https://www.youtube.com/watch?v=4GjXq2Sr55Q&feature=youtu.be&ab_channel=Stanford
+
+## Topics
+
 - MVVM Design Paradigm
 - Tipos
   - struct
