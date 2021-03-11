@@ -7,14 +7,16 @@
 
 import Foundation
 
-struct EmojiArt {
+//Encodable necesita que todas las variables sean Encodable también
+// Encodable, Decodable = Codable
+struct EmojiArt: Codable {
     //Es optional porque el modelo se instancia sin fondo
     var backgroundUrl:URL?
     var emojis = [Emoji]();
 
     //Modelo para los emoji
     //Solo EmojiArt sabrá acerca del id de Emoji
-    struct Emoji: Identifiable {
+    struct Emoji: Identifiable, Codable, Hashable {
         //Nunca se podrá cambiar el emoji
         let text:String
         var x:Int   //from center
@@ -33,6 +35,22 @@ struct EmojiArt {
         }
         
     }
+    
+    var json: Data? {
+        return  try? JSONEncoder().encode(self);
+    }
+    
+    // / permite usar return nil en el constructor
+    init?(json: Data?) {
+        if json != nil, let newEmojiArt = try? JSONDecoder().decode(EmojiArt.self, from: json!){
+            //Reemplazarse
+            self = newEmojiArt;
+        } else {
+            return nil;
+        }
+    }
+    //Múltiples constructores
+    init () { }
     
     private var uniqueEmojiId = 0
     

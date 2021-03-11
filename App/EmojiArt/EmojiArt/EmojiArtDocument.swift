@@ -14,7 +14,25 @@ class EmojiArtDocument: ObservableObject {
     static let palette: String = "🚌🦠😎🏵🎹";
 
     //Gatillar redibujar de la vista cada vez que cambia
-    @Published private var emojiArt:EmojiArt = EmojiArt();
+    //Workaroung for property observer problem with property wrappers
+    //@Published
+    private var emojiArt:EmojiArt {
+        willSet {
+            objectWillChange.send();
+        }
+        //Properties observers no funcionan bien con @Published. Bug
+        didSet {
+            print("json \(emojiArt.json?.utf8 ?? "nil")");
+            UserDefaults.standard.set(emojiArt.json,forKey: EmojiArtDocument.untitled);
+        }
+    };
+
+    private static let untitled = "EmojiArtDocument.Untitled";
+
+    init () {
+        emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey: EmojiArtDocument.untitled)) ?? EmojiArt();
+        fetchBackgroundImageData();
+    }
 
     //Gatillar redibujar de la vista cada vez que se obtiene la imagen
     @Published private(set) var backgroundImage: UIImage?;
