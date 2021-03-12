@@ -8,6 +8,8 @@
 // Modelo de Documento
 
 import SwiftUI
+//Para Subscribing a valores de Publisher
+import Combine
 
 class EmojiArtDocument: ObservableObject {
     
@@ -15,22 +17,23 @@ class EmojiArtDocument: ObservableObject {
 
     //Gatillar redibujar de la vista cada vez que cambia
     //Workaroung for property observer problem with property wrappers
-    //@Published
-    private var emojiArt:EmojiArt {
-        willSet {
-            objectWillChange.send();
-        }
-        //Properties observers no funcionan bien con @Published. Bug
-        didSet {
-            print("json \(emojiArt.json?.utf8 ?? "nil")");
-            UserDefaults.standard.set(emojiArt.json,forKey: EmojiArtDocument.untitled);
-        }
-    };
+    @Published var emojiArt:EmojiArt;
+    // Usar el valor proyectado del Published
+    //Cada vezx que el EmojiArt instance cambia, se actualizará el valor proyectado y se comunicará
 
     private static let untitled = "EmojiArtDocument.Untitled";
-
+    
+    //Variable para guardar la subscription al valor del Publisher
+    private var autoSaveCancellable: AnyCancellable?;
+    
     init () {
         emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey: EmojiArtDocument.untitled)) ?? EmojiArt();
+        //Subscribing a lo que el Publisher envía, publica
+        //$emojiArt es el valor proyectado de @Published
+        autoSaveCancellable = $emojiArt.sink { emojiArt in
+            //print ("\(emojiArt.json?.utf8 ?? "nil ")");
+            UserDefaults.standard.set(emojiArt.json, forKey: EmojiArtDocument.untitled);
+        }
         fetchBackgroundImageData();
     }
 
@@ -58,28 +61,45 @@ class EmojiArtDocument: ObservableObject {
         }
     }
     
-    func setBackgroundURL (_ url:URL?){
-        //De la extensión para obtener la url de la imagen
-        emojiArt.backgroundUrl = url?.imageURL;
-        fetchBackgroundImageData()
+    var backgroundURL: URL? {
+        set {
+            //De la extensión para obtener la url de la imagen
+            emojiArt.backgroundURL = newValue?.imageURL;
+            fetchBackgroundImageData()
+        }
+        get {
+            emojiArt.backgroundURL;
+        }
     }
+    
+    //Eta variable permite cancelar el subscription
+    private var fetchImageCancellable: AnyCancellable?
     
     private func fetchBackgroundImageData(){
         backgroundImage = nil
         //Provide some UI hint, loading progressbar
-        if let url = self.emojiArt.backgroundUrl {
-            // Obtener la URL desde el background thread
-            DispatchQueue.global(qos: .userInitiated).async {
-                if let imageData = try? Data(contentsOf: url) {
-                    // Avisar a la UI que se debe actualizar
-                    // Pasar data al main thread, UI
-                    DispatchQueue.main.async {
-                        if url == self.emojiArt.backgroundUrl {
-                            self.backgroundImage = UIImage(data: imageData);
-                        }
-                    }
-                }
-            }
+        if let url = self.emojiArt.backgroundURL {
+            //Cancelar request anteriorees a la nueva recién realizada
+            fetchImageCancellable?.cancel()
+            /*
+            //URLSession.shared trabajaba en la cola background, BackgroundQueue
+            let session = URLSession.shared
+            // UNa vez que se descargue la data, se publicará un mensaje con la data
+            let publisher = session.dataTaskPublisher(for: url)
+                //Se mapea, transforma el closure original de session, a uno personalizado
+                .map { data, urlResponse in UIImage(data:data) }
+                // Se pasa a MainQueue
+                .receive(on: DispatchQueue.main)
+                //Reemplaza el manejo del error del publisher, a un nil
+                .replaceError(with: nil)
+            // Lo que sea que publica el publisher, lo publica directamente en la propiedad de un clase, en self (acá está el objeto, clase en cuestión)
+            fetchImageCancellable = publisher.assign(to: \EmojiArtDocument.backgroundImage, on: self)
+            */
+            fetchImageCancellable = URLSession.shared.dataTaskPublisher(for: url)
+                .map { data, urlResponse in UIImage(data:data) }
+                .receive(on: DispatchQueue.main)
+                .replaceError(with: nil)
+                .assign(to: \EmojiArtDocument.backgroundImage, on: self)
         }
     }
     

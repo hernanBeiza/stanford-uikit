@@ -11,7 +11,7 @@ import Foundation
 // Encodable, Decodable = Codable
 struct EmojiArt: Codable {
     //Es optional porque el modelo se instancia sin fondo
-    var backgroundUrl:URL?
+    var backgroundURL:URL?
     var emojis = [Emoji]();
 
     //Modelo para los emoji
