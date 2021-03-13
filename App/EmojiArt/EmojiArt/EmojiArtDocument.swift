@@ -11,34 +11,48 @@ import SwiftUI
 //Para Subscribing a valores de Publisher
 import Combine
 
-class EmojiArtDocument: ObservableObject {
+class EmojiArtDocument: ObservableObject, Hashable, Identifiable {
+
+    //Función para definir cuando dos objetos del mismo tipo son iguales
+    //Tener ojo con las copias por referencia, por eso se usa el .id
+    static func == (lhs: EmojiArtDocument, rhs: EmojiArtDocument) -> Bool {
+        lhs.id == rhs.id;
+    }
+    
+    //Crear un id único
+    let id: UUID;
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
     
     static let palette: String = "🚌🦠😎🏵🎹";
-
     //Gatillar redibujar de la vista cada vez que cambia
     //Workaroung for property observer problem with property wrappers
     @Published var emojiArt:EmojiArt;
     // Usar el valor proyectado del Published
-    //Cada vezx que el EmojiArt instance cambia, se actualizará el valor proyectado y se comunicará
-
-    private static let untitled = "EmojiArtDocument.Untitled";
+    //Cada vez que el EmojiArt instance cambia, se actualizará el valor proyectado y se comunicará
     
-    //Variable para guardar la subscription al valor del Publisher
+    //Variable para retener la subscription al valor del Publisher
     private var autoSaveCancellable: AnyCancellable?;
-    
-    init () {
-        emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey: EmojiArtDocument.untitled)) ?? EmojiArt();
+
+    init (id:UUID? = nil) {
+        self.id = id ?? UUID();
+        let defaultsKey = "EmojiArtDocument.\(self.id.uuidString)";
+        emojiArt = EmojiArt(json: UserDefaults.standard.data(forKey: defaultsKey)) ?? EmojiArt();
         //Subscribing a lo que el Publisher envía, publica
         //$emojiArt es el valor proyectado de @Published
         autoSaveCancellable = $emojiArt.sink { emojiArt in
             //print ("\(emojiArt.json?.utf8 ?? "nil ")");
-            UserDefaults.standard.set(emojiArt.json, forKey: EmojiArtDocument.untitled);
+            UserDefaults.standard.set(emojiArt.json, forKey: defaultsKey);
         }
         fetchBackgroundImageData();
     }
 
     //Gatillar redibujar de la vista cada vez que se obtiene la imagen
     @Published private(set) var backgroundImage: UIImage?;
+    @Published var steadyStateZoomScale:CGFloat = 1.0;
+    @Published var steadyStatePanOffset: CGSize = .zero;
 
     //Variable computada para obtener los valores de este modelo
     var emojis: [EmojiArt.Emoji] { emojiArt.emojis }
