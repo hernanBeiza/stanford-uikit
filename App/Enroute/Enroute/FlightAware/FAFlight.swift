@@ -65,8 +65,6 @@ struct FAFlight: Codable, Hashable, Identifiable, Comparable, CustomStringConver
         }
     }
 
-    // Hay que implementar CustomStringConvertible
-    // Es como un .toString personalizado
     var description: String {
         if let departure = self.departure {
             return "\(ident) departed \(origin) at \(departure) arriving \(arrival)"
