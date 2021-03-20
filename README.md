@@ -1,4 +1,4 @@
-# stanford-uikit-memorize
+# stanford-uikit
 Clases Stanford UI de SwiftUI
 
 URL a playlist: 

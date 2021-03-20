@@ -153,6 +153,7 @@ extension String
 {
     // returns ourself but with numbers appended to the end
     // if necessary to make ourself unique with respect to those other Strings
+    // Don't Care type StringCollection en una función
     func uniqued<StringCollection>(withRespectTo otherStrings: StringCollection) -> String
         where StringCollection: Collection, StringCollection.Element == String {
         var unique = self
