@@ -8,6 +8,21 @@
 
 import CoreData
 import Combine
+import MapKit
+
+// Extension para MapView
+extension Airport: MKAnnotation {
+    public var coordinate: CLLocationCoordinate2D {
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
+    //Datos a mostrar en el mapa
+    public var title:String? {
+        name ?? icao
+    }
+    public var subtitle: String? {
+        location
+    }
+}
 
 // Son extensions de los objetos CoreData par apoder agregarles comportamientos
 extension Airport: Comparable {

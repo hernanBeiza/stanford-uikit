@@ -105,6 +105,7 @@ struct PaletteEditor: View {
     let fontSize: CGFloat = 40;
 }
 
+/*
 struct PaletteChooser_Previews: PreviewProvider {
     static var previews: some View {
         //Se pasa un Binding con un valor constante
@@ -112,3 +113,4 @@ struct PaletteChooser_Previews: PreviewProvider {
         PaletteChooser(document: EmojiArtDocument(), chosenPalette: Binding.constant("") )
     }
 }
+*/

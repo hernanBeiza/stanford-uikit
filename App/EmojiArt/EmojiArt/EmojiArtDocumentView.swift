@@ -80,7 +80,8 @@ struct EmojiArtDocumentView: View {
                     // location, la posición del área de drop
                     return self.drop(providers:providers, at:location);
                 }
-                .navigationBarItems(trailing: Button(action: {
+                .navigationBarItems(leading:self.pickImage,
+                                    trailing: Button(action: {
                     // Obtener valor copiado en el pasteboard
                     if let url = UIPasteboard.general.url, url != self.document.backgroundURL {
                         self.confirmBackgroundPaste = true;
@@ -113,6 +114,36 @@ struct EmojiArtDocumentView: View {
             )
         }
 
+    }
+    
+    @State private var showImagePicker = false;
+    @State private var imagePickerSourceType = UIImagePickerController.SourceType.photoLibrary;
+    
+    private var pickImage: some View {
+        HStack {
+            Image(systemName:"photo").imageScale(.large).foregroundColor(.accentColor).onTapGesture {
+                self.imagePickerSourceType = .photoLibrary;
+                showImagePicker = true
+            }
+            if UIImagePickerController.isSourceTypeAvailable(.camera){
+                Image(systemName:"camera").imageScale(.large).foregroundColor(.accentColor).onTapGesture {
+                    self.imagePickerSourceType = .camera;
+                    showImagePicker = true
+                }
+            }
+        }
+        .sheet(isPresented: $showImagePicker, content: {
+            ImagePicker(sourceType:self.imagePickerSourceType) { image in
+                if image != nil {
+                    // Se pasa a una cola en segundo plano para evitar que quede en la cola de la principal
+                    DispatchQueue.main.async {
+                        // storeInFilesystem es una extensión
+                        self.document.backgroundURL = image!.storeInFilesystem()
+                    }
+                }
+                showImagePicker = false;
+            }
+        })
     }
     
     @State private var explainBackgroundPaste = false;

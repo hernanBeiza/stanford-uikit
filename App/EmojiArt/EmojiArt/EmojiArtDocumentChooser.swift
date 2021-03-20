@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+
 struct EmojiArtDocumentChooser: View {
     @EnvironmentObject var store: EmojiArtDocumentStore
         
@@ -48,9 +49,10 @@ struct EmojiArtDocumentChooser: View {
     
 }
 
-
+/*
 struct EmojiArtDocumentChooser_Previews: PreviewProvider {
     static var previews: some View {
         EmojiArtDocumentChooser()
     }
 }
+*/
