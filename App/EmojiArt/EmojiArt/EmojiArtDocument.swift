@@ -108,7 +108,7 @@ class EmojiArtDocument: ObservableObject, Hashable, Identifiable {
         }
     }
     
-    //Eta variable permite cancelar el subscription
+    //Esta variable permite cancelar el subscription
     private var fetchImageCancellable: AnyCancellable?
     
     private func fetchBackgroundImageData(){

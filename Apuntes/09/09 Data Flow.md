@@ -11,10 +11,7 @@
   - @State
   - @Published
   - @ObserverdObject
-- Publishers
-- 
-
-- 
+- Publishersß
 
 ## Property Wrappers
 
@@ -103,9 +100,9 @@ var emojiArt: EmojiArt {
 - Se usa un @Binding para obtener el valor directamente desde ViewModel y evitar tener
   - Un @State en la vista
   - Un @State en el ViewModel
-  - No se usa dos diferentes @State var en dos vistas diferente para almacenar el mismo objecto, valor, etc.
-  - En ese caso uno de los dos debe ser un @BGinding
-- Permite crear variables para coenctar cosas entre sí y evitar dos diferentes @State
+  - No se usa dos diferentes @State var en dos vistas diferente para almacenar el mismo objeto, valor, etc.
+  - En ese caso uno de los dos debe ser un @Binding
+- Permite crear variables para conectar cosas entre sí y evitar dos diferentes @State
 
 #### Ejemplo de uso de bindings
 
