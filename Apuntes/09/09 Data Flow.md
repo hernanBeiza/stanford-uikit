@@ -20,7 +20,7 @@
 - Encapsulan un template de un comportamiento que se aplican a las variables que encapsulan
 - Ejemplo
   - Una variable que vive en @State
-  - Una variable que publica sus cambios @Publised
+  - Una variable que publica sus cambios @Published
   - Hacer que una vista se redibuje cuando un cambio publicado es detecado @ObservedObject
 - Syntactic Sugar
 
@@ -62,7 +62,7 @@ var emojiArt: EmojiArt {
   - Anything
   - wrappedValue es cualquier variable, de cualquier tipo
 - ¿Qué hace?
-  - Almacena los varloes en el heap
+  - Almacena los valores en el heap
   - Cuando cambia, invalida la vista
 - ProjectedValue ($)
   - No es un Published
@@ -84,7 +84,7 @@ var emojiArt: EmojiArt {
 - Property wrapped
 - Vincula
 - ¿Qué es?
-  - Es un valor que consolidado de alguien más, de otro objecto
+  - Es un valor que consolidado de alguien más, de otro objeto
   - Que se vincula a otra variable
 - ¿Qué hace?
   - Obtiene o setea el valor del wrappedValue desde otra fuente de datos
@@ -185,7 +185,6 @@ let myView = MyView(viewModel:theViewModel);
   - Invalida la vista cuando cuando el wrappedValue gatilla objectWillChange.send()
 - Projected value ($)
   - Es un Binding, vínculo, con las variables de wrappedValue (del ViewModel)
-- 
 
 ### @Environment
 

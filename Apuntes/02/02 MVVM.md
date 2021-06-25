@@ -81,9 +81,9 @@
 ##### Keywords
 
 - @ObservableObject
-- @Publicshed
+- @Published
 - objectWillChanged.send()
-- environemtnObject()
+- environmentObject()
 
 ### Cómo comunicar los cambios desde la vista hacia el modelo?
 
