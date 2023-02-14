@@ -22,7 +22,7 @@
 - Como struct o class
 - Pero sólo puede tener estados estáticos
 
-`````swift
+```swift
 enum FastFoodMenuItem {
   case hamburger(numberOfPatties: Int)
   case fries(size: FryOrderSize)
@@ -34,100 +34,100 @@ enum FryOrderSize {
   case large
   case small
 } 
-`````
+```
 
 #### Setear valor de un enum
 
-`````swift
+```swift
 let menuItem: FastFoodMenuItem = FastFoodMenuItem.hamburger(patties:2);
 let otherItem: FastFoodMenuItem = FastFoodMenuItem.cookie;
-`````
+```
 
 - Swift puede inferir desde dónde obtener el valor, pero al menos debe estar definido el tipo de dato en alguno de los dos lados de la asignación
 
-````swift
+```swift
 //OK
 let menuItem: FastFoodMenuItem = FastFoodMenuItem.hamburger(patties:2);
 let otherItem: FastFoodMenuItem = .cookie;
 //Error, no puede inferir
 let yetAnotherItem = .cookie;
-````
+```
 
 - Como checkear el valor: Usando swith
 
-````swift
+```swift
 var menuItem = FastFoodMenuItem.hamburger(patties:2)
 switch menuItem {
-	case FastFoodMenuItem.hamburger: print("burger")
-	case FastFoodMenuItem.fries: print("fries")
+    case FastFoodMenuItem.hamburger: print("burger")
+    case FastFoodMenuItem.fries: print("fries")
   case FastFoodMenuItem.drink: print("drink")
-	case FastFoodMenuItem.cookie: print("cookie")
+    case FastFoodMenuItem.cookie: print("cookie")
 }
 //Se podrían inferir los tipos
-````
+```
 
 - Es necesario usar break
 
-````swift
+```swift
 var menuItem = FastFoodMenuItem.hamburger(patties:2)
 switch menuItem {
-	case .hamburger: break
-	case .fries: print("fries")
+    case .hamburger: break
+    case .fries: print("fries")
   case .drink: print("drink")
-	case .cookie: print("cookie")
+    case .cookie: print("cookie")
 }
 //No imprimirá nada por consola
-````
+```
 
 - Default 
 
-````swift
+```swift
 var menuItem = FastFoodMenuItem.cookie
 switch menuItem {
-	case .hamburger: break
-	case .fries: print("fries")
+    case .hamburger: break
+    case .fries: print("fries")
   case .drink: print("drink")
-	default .print("other")
-}	
-````
+    default .print("other")
+}    
+```
 
 - Para poder obtener los valores de variables, trabajar con la data asociada
 
-````swift
+```swift
 var menuItem = FastFoodMenuItem.drink("Coke", ounces: 32)
 switch menuItem {
-	case .hamburger: (let pattyCount): print ("a burger with \(pattyCount) patties!")
-	case .fries: (let size): print("a \(size) order of fries!")")
-	case .drink: (let brand, let ounces): print("a \(ounces)oz \(brand)")
-	default .cookie("a cookie!")
-}	
-````
+    case .hamburger: (let pattyCount): print ("a burger with \(pattyCount) patties!")
+    case .fries: (let size): print("a \(size) order of fries!")")
+    case .drink: (let brand, let ounces): print("a \(ounces)oz \(brand)")
+    default .cookie("a cookie!")
+}    
+```
 
 - Se pueden tener métodos en los enums y variables computadas, pero no valores almacenados
 
-````swift
+```swift
 enum FastFoodMenuItem {
   case hamburger(numberOfPatties: Int)
   case fries(size: FryOrderSize)
   case drink(String, ounces:Int) //se puede tener parámetro sin nombre, en este caso es la marca
   case cookie
-  
+
   func isIncludedInSpecialOrder(numer: Int) -> Bool {}
   var calories : Int { 
     //switch on self and calculate caloric value here 
   }
 }
-````
+```
 
 - Si hay una función, se pueden usar los valores del mismo switch usando self
 
-````swift
+```swift
 enum FastFoodMenuItem {
   case hamburger(numberOfPatties: Int)
   case fries(size: FryOrderSize)
   case drink(String, ounces:Int) //se puede tener parámetro sin nombre, en este caso es la marca
   case cookie
-  
+
   func isIncludedInSpecialOrder(numer: Int) -> Bool {
     switch self {
       case .hamburger(let pattyCound): return pattyCount == number
@@ -139,47 +139,47 @@ enum FastFoodMenuItem {
     //switch on self and calculate caloric value here 
   }
 }
-````
+```
 
 - Se pueden iterar sobre los estados de un enum implementando CaseIterable
 
-````swift
+```swift
 enum TeslaModel: CaseIterable {
-	case X
-	case S
-	case Three
-	case Y
+    case X
+    case S
+    case Three
+    case Y
 }
-````
+```
 
 - Ahora tendrá una variable static llamada allCases iterable
 
-````swift
+```swift
 for model in TeslaModel.allCases {
-	reportSalesNumbers(for: model)
+    reportSalesNumbers(for: model)
 }
 func reportSalesNumbers(for model: model){
-	switch model {...}	
+    switch model {...}    
 }
-````
+```
 
 ### Optional
 
-- ¡Muy importante en Switch!
+- ¡Muy importante en Swift!
 - Es un enum
 
-````swift
+```swift
 enum Optional <T> { //A generic like Array<Element>
-	case none
+    case none
   case some(T) //Don't care type
 }
-````
+```
 
 - Puede tener sólo dos valores 
   - is set (some)
   - not set(none)
 
-##### ¿Cuándo usar Optionals? 
+##### ¿Cuándo usar Optionals?
 
 - Cuando hayan valores not Set o sin especificar o undetermined
 - Cuando exista una función que deba retornar un valor pero no lo encontró, se podría retornar algo 
@@ -215,7 +215,7 @@ var hello:Optional<String> = .none
 
 - Se puede acceder al valor usando exclamación !
 
-````swift
+```swift
 let hello:String? = ...
 print(hello!)
 Si la variable no tiene valor, habrá una excepción
@@ -225,15 +225,15 @@ switch hello {
   case .none: // crash
   case .some(let data): print(data)
 }
-````
+```
 
 - O usar una variable segura para evitar ese problema y usarlo en el interior del if
 
-````swift
+```swift
 if let safeHello = hello {
-	print(safeHello);
+    print(safeHello);
 } else {
-	//do something
+    //do something
 }
 
 //Esto sería en enum
@@ -241,12 +241,12 @@ switch hello {
   case .none: { // do something else }
   case .some(let data): print(data)
 }
-````
+```
 
 - Optional defaulting
   - nil coalescing operator
 
-````swift
+```swift
 let x:String? = ...
 let y = x ?? "foo"
 
@@ -255,11 +255,11 @@ switch x {
   case .none: y = "foo"
   case .some(let data): y = data
 }
-````
+```
 
 #### Unwrapping
 
-````swift
+```swift
 //Agregar una extensión al tipo Array que tiene elementos Identifiable
 extension Array where Element: Identifiable {
     //Optional Int
@@ -284,5 +284,4 @@ func body (for item:Item, in layout:GridLayout) -> some View {
     }
   }
 }
-````
-
+```

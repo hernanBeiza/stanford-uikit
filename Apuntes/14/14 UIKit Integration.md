@@ -37,20 +37,21 @@
 ### Representables
 
 - UIViewRepresentable
+
 - UIViewControllerRepresentable
+
 - Ambos son vistas SwiftUI
-
 1. Una función que crea el UIKit (vista o controller)
-
-   ````swift
+   
+   ```swift
    func makeUIView { Controller }(context: Context) -> view/controller
-   ````
+   ```
 
 2. Una función que actualiza el elemento UIKit cuando corresponda (bindings change, etc)
 
-````swift
+```swift
 func updateUIView { Controller } (view/controller, contet: Context)
-````
+```
 
 3. Un objeto coordinador, el que se encarga de manejar los delegates
 
@@ -60,18 +61,18 @@ func makeCoordinator() -> Coordinator // Coordinator es de tipo Don't care for R
 
 4. Un contexto (que contiene el Coordinator, los elementos SwiftUI's del ambiente, animation transaction)
 
-````swift
+```swift
 // pasada en los métodos anteriores
 class Coordinator: NSObject, MKMapViewDelegate {
-        
+
 }
-````
+```
 
 5. Y una fase de limpieza, teard down, para limpiar variables, etc. cuando la vista o controlador desaparezca
 
-````swift
+```swift
 func dismantleUIView { Controller } (view/controller, coordinator: Coordinator)
-````
+```
 
 ## Demo
 
@@ -79,7 +80,7 @@ func dismantleUIView { Controller } (view/controller, coordinator: Coordinator)
   - Usar MapKit
   - Usar @Binding para pasar un valor desde una nested Class a Struct
 
-````swift
+```swift
 //
 //  MapView.swift
 //  Enroute
@@ -96,16 +97,16 @@ import MapKit
 struct MapView: UIViewRepresentable {
     let annotations: [MKAnnotation];
     @Binding var selection: MKAnnotation?;
-    
+
     typealias UIViewType = MKMapView
-        
+
     func makeUIView(context: Context) -> MKMapView {
         let mkMapView = MKMapView()
         mkMapView.delegate = context.coordinator;
         mkMapView.addAnnotations(annotations);
         return mkMapView;
     }
-    
+
     func updateUIView(_ uiView: MKMapView, context: Context) {
         //redibujar, actualizar, etc
         if let anntation = selection {
@@ -113,11 +114,11 @@ struct MapView: UIViewRepresentable {
             uiView.setRegion(MKCoordinateRegion(center: anntation.coordinate, span: town), animated: true)
         }
     }
-    
+
     func makeCoordinator() -> Coordinator {
         return Coordinator(selection:$selection);
     }
-    
+
     // Los delegates heredan de NSObject
     class Coordinator: NSObject, MKMapViewDelegate {
         @Binding var selection:MKAnnotation?;
@@ -125,7 +126,7 @@ struct MapView: UIViewRepresentable {
         init(selection:Binding<MKAnnotation?>) {
             self._selection = selection;
         }
-        
+
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
             let view = mapView.dequeueReusableAnnotationView(withIdentifier: "MapViewAnnotation") ?? MKPinAnnotationView(annotation: annotation, reuseIdentifier: "MapViewAnnotation")
             view.canShowCallout = true;
@@ -138,9 +139,8 @@ struct MapView: UIViewRepresentable {
             }
         }
     }
-    
-}
 
-````
+}
+```
 
 - Integrar UIKit, UIViewController en SwiftUI

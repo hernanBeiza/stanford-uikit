@@ -2,7 +2,7 @@
 
 - CS193P
 - Spring 2020
-  https://www.youtube.com/watch?v=4GjXq2Sr55Q&feature=youtu.be&ab_channel=Stanford
+- https://www.youtube.com/watch?v=4GjXq2Sr55Q&feature=youtu.be&ab_channel=Stanford
 
 ## Topics
 
@@ -15,7 +15,7 @@
 ## MVVM
 
 - Paradigma de diseño para organizar el ćodigo
-- Reactice user interfaces
+- Reactive user interfaces
 - Similar a MVC
 - Model
 - View
@@ -64,7 +64,7 @@
 
 #### Reactive
 
-- Automáticamente si hay un cambnio en el modelo, se mostrará en la vista
+- Automáticamente si hay un cambio en el modelo, se mostrará en la vista
 - Mostrar como el modelo indica
 - Una vez que el modelo cambia, cambia la UI
 - Reacciona a los cambios en el modelo
@@ -109,15 +109,15 @@
 #### Similitudes
 
 - Variables almacenadas
-- Variables computadas o recetadas: obtenidas de funciones prcesada
+- Variables computadas o recetadas: obtenidas de funciones procesadas
 - Constantes, lets: valores que nunca cambian
 - Funciones: con label argumento y valores
 
-````swift
+```swift
 func multiplicat (_ operando:Int, by otroOperando:Int) -> {
-	return operand * otroOperando
+    return operand * otroOperando
 }
-````
+```
 
 - Initializers: funciones especiales que son llamadas cuando se crea el struct o la clase
   - Suerte de constructor
@@ -125,19 +125,17 @@ func multiplicat (_ operando:Int, by otroOperando:Int) -> {
 
 #### Diferencias entre Structs y Class
 
-| struct                                                       | class                                                        |
-| ------------------------------------------------------------ | ------------------------------------------------------------ |
-| Value type                                                   | Reference type                                               |
-| Copied when passed or assigned                               | Passed around via pointers                                   |
-| Copy on write                                                | Automatically reference counted                              |
-| Functional programming                                       | Object-oriented programming                                  |
-| No herencia                                                  | Herencia (Single)                                            |
-| FREE init initializers ALL vars                              | FREE init initializers NO vars                               |
-| Mutability must be explicitly stated                         | Always mutable                                               |
-| Go to data structure                                         | Used in specific circumstances                               |
+| struct                                                                             | class                                                                               |
+| ---------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| Value type                                                                         | Reference type                                                                      |
+| Copied when passed or assigned                                                     | Passed around via pointers                                                          |
+| Copy on write                                                                      | Automatically reference counted                                                     |
+| Functional programming                                                             | Object-oriented programming                                                         |
+| No herencia                                                                        | Herencia (Single)                                                                   |
+| FREE init initializers ALL vars                                                    | FREE init initializers NO vars                                                      |
+| Mutability must be explicitly stated                                               | Always mutable                                                                      |
+| Go to data structure                                                               | Used in specific circumstances                                                      |
 | Everything you've seen so far is a struct (except VIEW which is **protocol** type) | The ViewModel in MVVM is always a class (also, UIKIT, OLD iOS STYLE) is class-based |
-
-
 
 ##### Struct es tipo valor
 
@@ -178,12 +176,12 @@ func multiplicat (_ operando:Int, by otroOperando:Int) -> {
 - Contiene un grupo de elementos
 - Puede haber lo que sea dentro de un Array
 
-````swift
+```swift
 struct Array<Element> {
-	...
-	func append(_ element:Element){...}
+    ...
+    func append(_ element:Element){...}
 }
-````
+```
 
 - Element no es struct, class o protocol, es solo un placeholder para un tipo
 
@@ -217,7 +215,7 @@ miArreglo.append(100)
 ```swift
 var operacion: (Double) -> Double
 func cuadrado(operand:Double) -> Double {
-	return operand * operand:
+    return operand * operand:
 }
 let resulado = operacion(4) // retornará 16
 // No se usan labels cuando se ejecutan estas funciones en variables
@@ -227,15 +225,13 @@ let resulado = operacion(4) // retornará 16
 
 - Es común pasar una función que se puede como parámetro pero sin declararla en una variable
 
-
-
 ## Ejemplo
 
 - Crear un archivo nuevo de tipo swift, NO UI
 
 - Swift Source File
 
-````swift
+```swift
 //
 //  MemoryGame.swift
 //  Memorize
@@ -244,21 +240,19 @@ let resulado = operacion(4) // retornará 16
 //
 
 import Foundation
-
-````
+```
 
 ### Uso de un tipo Don't Care
 
-````swift
-
+```swift
 //Se debe declarar que se usa un Don't care type
 struct MemoryGame <CardContent> {
     var cards:Array <Card>
-    
+
     func choose (card:Card) -> Void {
         print("Card choosen: \(card)")
     }
-    
+
     //Nesting Struct, struct inside struct. Pasar usar MemoryGame.Card
     struct Card {
         var isFaceUp: Bool;
@@ -267,27 +261,24 @@ struct MemoryGame <CardContent> {
         var content: CardContent; //Don't care type
 
     }
-    
+
 }
-````
+```
 
 ### Uso de Class
 
-- 
-
-```swift
-
-import Foundation
-
-// Es una clase porque es data que quiero compartir
-// Usa punteros
-// Copiar data
-class EmojiMemoryGame {
-    var model:MemoryGame<String>;
-}
+- ```swift
+  import Foundation
+  
+  // Es una clase porque es data que quiero compartir
+  // Usa punteros
+  // Copiar data
+  class EmojiMemoryGame {
+    var model:MemoryGame<String>;
+  }
+  ```
 
 ```
-
 - El problema de usar una clase es que si todas esas instancias es que comparten propiedades y comportamientos
 - Otros objetos pueden ver las propiedades de las clases y cambiar los valores
   - Pero para esos existen los mutadores de accesos: private
@@ -297,19 +288,16 @@ class EmojiMemoryGame {
 class EmojiMemoryGame {
     private (set) var model:MemoryGame<String>;
 }
-
 ```
 
 #### Inline function
 
-````swift
+```swift
 //Inline function, closures: Captura cosas
 private var model:MemoryGame<String> = MemoryGame<String>(numbersOfPairsOfCards:2, cardContentFactory: { (pairIndex: Int) -> String in
-                                                                                                        	return "🧐";
+                                                                                                            return "🧐";
                                                                                                        });
 
 //Lo mismo de arriba
 private var model:MemoryGame<String> = MemoryGame<String>(numbersOfPairsOfCards:2) { pairIndex in "🧐" };
-
-````
-
+```

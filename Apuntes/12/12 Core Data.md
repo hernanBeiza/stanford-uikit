@@ -53,10 +53,9 @@
 
 ![](01.png)
 
-## Códigos de ejemplo 
+## Códigos de ejemplo
 
-
-````swift
+```swift
 // Guardar
 @Environment(\managedObjectContext) var context
 let flight = Flight(context:context)
@@ -73,45 +72,44 @@ request.sortDescriptors = [NSSOrtDescriptor(key: "ident", ascending:true)]
 //Obtener flights según el predicate
 let flights = try? context.fetch(request)
 // flights será nil si falla, si no será un arreglo de Flight.
-````
+```
 
 ## SwiftUI
 
 - Integración a la vista
 
-````swift
+```swift
 @ObservedObject var flight: Flight
 // Y ahora sí se puede usar los valores del objetos
 Text(flight.ident)
-
-````
+```
 
 - Los ObservedObjects no gatillan automáticamente objectWillChange.send(0)
 
-````swift
-@FetchRequest(entity:sortDescriptors:predicate) var flights:FetchedResults<Flight>	
+```swift
+@FetchRequest(entity:sortDescriptors:predicate) var flights:FetchedResults<Flight>    
 
 @FetchRequest(fetchRequest:) var airports: FetchedResults<Airport>
 FetchedResults<Flight>
 //Collection, no array, de objetos Flight/Airports
-````
+```
 
 - Flights y Airports continuamente se actualizarán segun los cambios de la base de datos
 
-````
+```
 ForEach(flights) { flight in 
-	// UI for a flight built using flight
+    // UI for a flight built using flight
 }
-````
+```
 
 - Si un flight es guardado en la base de datos, y hace match con el **predicate** del **FetchRequest**, el **ForEach** inmediatamente **recreará la vista** porque flights se actualizará
 
 - Se puede inicializar un FetchRequest haciendo
 
-````
+```
 _flights = FetchRequest(...)
 // en un init
-````
+```
 
 ## CoreData
 

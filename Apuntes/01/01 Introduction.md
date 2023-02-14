@@ -10,6 +10,7 @@
 - Demos: Muchos
 
 - Lectures Sliders: Conceptos
+
 - Reading Assignments: Para aprender
 
 Herramientas
@@ -19,31 +20,35 @@ Herramientas
 Crear aplicación Xcode
 
 - Name: Memorize
+
 - Team
+  
   - Agregar un Apple ID
 
 - Organization Name: CS193p Instructor
+  
   - Agregar un Apple ID
-  - 
-- Organization Identifier: Reverse domain name
-  - cl.hiperactivo.memorize
-- Languaje: Swift
-- 
 
-![Creando proyecto](01/image-20210220120549409.png)
+- Organization Identifier: Reverse domain name
+  
+  - cl.hiperactivo.memorize
+
+- Languaje: Swift
+
+![Creando proyecto](image-20210220120549409.png)
 
 ## Revisando el Código
 
-````swift
+```swift
 import SwiftUI
 
 struct ContentView: View {
-    var body: some View {
-        Text("Welcome back to iOS world HB!")
-            .padding()
-    }
+  var body: some View {
+    Text("Welcome back to iOS world HB!")
+    .padding()
+  }
 }
-````
+```
 
 - Depende de Foundations
 - Al escirbir cosas UI, se implementa SwiftUI
@@ -53,23 +58,23 @@ struct ContentView: View {
   - Variables
   - Funciones
 
-````swift
+```swift
 struct ContentView: View { }
-````
+```
 
 - Programación funcional
 - Se comportará como View
 - ContentView es la ventana completa, la que contiene todo
 
-````swift
+```swift
 var body: some View {
   //Retorna estos valores cada vez que el sistema los solicita
   Text("Welcome back to iOS world HB!")
   .padding()
 }
-````
+```
 
-- En swift, una varuable se define con **var**
+- En swift, una variable se define con **var**
 - Pero dentro de los structs, vars, en realidad es una propiedad. No **variable**
 - **some** es un tipo de dato genérico, que indica que es parte de alguna, some, vista, view
   - Las vistas, view, son como legos. Se van uniendo
@@ -78,36 +83,34 @@ var body: some View {
   - El sistema pregunta por el valor de la variable body, se preocesa y retorna la vista combinada
   - Es como un **return** de una función.
 
-````swift
+```swift
 struct ContentView: View {
     var body: some View {
         return Text("Welcome back to iOS world HB!")
             .padding()
     }
 }
-````
-
-
+```
 
 - some View, le dice al compilador que averigue el mismo el tipo de dato que debe
 - Swift es Strong Typed. No es como Javascript
   - Cada variable tiene un tipo específico
 - cornerRadius es el nombre del **argumento** de la **función RoundedRectangle**
 
-````swift
+```swift
 struct ContentView: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 10.0)
     }
 }
-````
+```
 
 ### ZStack
 
 - Stack es una vista combinada, CombinerView
 - Sirve para apilar vistas, se puede usar ZStack
 
-````swift
+```swift
 struct ContentView: View {
     var body: some View {
         return ZStack(content: {
@@ -117,14 +120,14 @@ struct ContentView: View {
         })
     }
 }
-````
+```
 
 #### Propiedades de las vistas
 
 - .foregroundColor(.orange)
 - .stroke()
 
-````swift
+```swift
 struct ContentView: View {
     var body: some View {
         return ZStack(content: {
@@ -133,14 +136,14 @@ struct ContentView: View {
         }).foregroundColor(.orange)
     }
 }
-````
+```
 
 ### ForEach
 
 - Otro tipo de Vista combinada
 - Permite mostrar varios elementos, iterar
 
-````swift
+```swift
 struct ContentView: View {
     var body: some View {
         //No incluye el 4
@@ -155,8 +158,7 @@ struct ContentView: View {
         })
     }
 }
-
-````
+```
 
 - El depurador mostrará cada vista diferente
 - hay que poner esta vista en otra vista combinada, llamada HStack
@@ -166,7 +168,7 @@ struct ContentView: View {
 - VistaCombinada
 - Permite mostrar los elementos 
 
-````swift
+```swift
 struct ContentView: View {
     var body: some View {
         //Vista combinada
@@ -185,13 +187,11 @@ struct ContentView: View {
         .foregroundColor(.orange)
     }
 }
-
-````
+```
 
 - Swift permite elminar los nombres de los argumentos cuando sólo hay uno
 
-````swift
-
+```swift
 struct ContentView: View {
     var body: some View {
         //Vista combinada
@@ -210,7 +210,7 @@ struct ContentView: View {
         .foregroundColor(.orange)
     }
 }
-````
+```
 
 ## Refactorizando los Structs
 
@@ -218,8 +218,7 @@ struct ContentView: View {
 - Los structs necesitan que las propiedades estén definididas
 - En caso contrario habrá que agregar la propiedad y su valor inicializado
 
-````swift
-
+```swift
 struct ContentView: View {
     var body: some View {
         //Vista combinada
@@ -251,5 +250,4 @@ struct CardView: View {
         }
     }
 }
-````
-
+```

@@ -27,8 +27,6 @@
   - Almacnear cosas en disco
   - En sistema de archivos del dispositivo
 
-
-
 ## Cloud Kit
 
 - Base de datos en la nube
@@ -74,7 +72,7 @@
 
 #### Crear un registro en Cloud Kit
 
-````swift
+```swift
 let db = CKContainer.default.public/shared/privateCloudDatabase
 //private es la databse normal
 //public si se pone data, otros usuarios, pueden ver la data
@@ -86,15 +84,15 @@ tweet["text"] = "Texto a guardar en el registro Tweet"
 let tweet = CKRecord("TwitterUser");
 tweet["tweeter"] = CKReference(record:tweeter, action:.deleteSelf)
 db.save(tweet) { (saveRecord:CKrecord?, error:NSError?) -> Void in 
-	if error == nil {
-	     //Guardado OK
+    if error == nil {
+         //Guardado OK
    } else if error?.errorCode ==CKErrorCode.NotAuthenticated.rawValue {
-		// Se debe loguear el usuario
-	} else {
-		// Revisar otros 29 CKErrorCodes!  
-	}
+        // Se debe loguear el usuario
+    } else {
+        // Revisar otros 29 CKErrorCodes!  
+    }
 }
-````
+```
 
 #### Querings, consultando registros en la base de datos
 
@@ -154,10 +152,10 @@ db.perform(query) { records:[CKRecord]?, error: NSError?) in
 
 ```swift
 let url:URL = FileMananger.default.url(
-	for directory: FileManager.SearchPathDirectory.documentDirectory,
-	in domainMask: .userDomainMask // Siempre será .userDomainMask en iOS
-	appropiatedFor: nil, //importante al reemplazar archivos
-	create: true
+    for directory: FileManager.SearchPathDirectory.documentDirectory,
+    in domainMask: .userDomainMask // Siempre será .userDomainMask en iOS
+    appropiatedFor: nil, //importante al reemplazar archivos
+    create: true
 )
 ```
 
@@ -165,17 +163,17 @@ let url:URL = FileMananger.default.url(
   - No bloquea a no ser que sea un archivo gigante
 - Métodos URL
 
-````swift
+```swift
 func appendingPathComponent(String) -> URL
 func appendinPathExtension(String) -> URL
-````
+```
 
 #### Que es lo que hay al final de la URL
 
-````swift
+```swift
 var isFileURL: Bool //exista o no
 func resourcesValues(for keys:[URLResouceKey]) throws -> [URLResourceKey:Any]?
-````
+```
 
 - Arreglo con llaves que se necesitan pedir
   - .creationDateKey
@@ -207,9 +205,9 @@ func write(to url:URL, options: Data.WritingsOptions) throws -> Bool
 - Permite trabajar con los archivos
 - Revisar si existe
 
-````
+```
 fileExists(atPath: String) -> Bool
-````
+```
 
 - Mover un archivo a otra ubicación
 - Enumar directorios

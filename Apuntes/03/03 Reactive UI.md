@@ -10,23 +10,23 @@
 - Reactive Demo
 
 - Varieties of Types
+  
   - Protocol
   - Enum
+
 - Viewlayout
 
 ## Reactive Demo
 
-- 
-
-### Tips: Cambiar el nombre uasndo la herramienta Refactor
+- ### Tips: Cambiar el nombre usa
 
 - Command + Click
 
-![image-20210221180350684](/Users/hb/Dropbox/HB/Developer/Cursos/Stanford - SwiftUI/03/image-20210221180350684.png)
+![image-20210221180350684](image-20210221180350684.png)
 
 ### External and Internal namings in functions
 
-````swift
+```swift
 //External an internal names in Swift
 //of es el nombre externo del parámetro cuando es llamado desde afuera
 //card es el nombre interno a usar en la función
@@ -37,7 +37,7 @@ func index(of card:Card) -> Int {
     }
   }
 }
-````
+```
 
 ## ObservableObject
 
@@ -46,32 +46,30 @@ class EmojiMemoryGame: ObservableObject {
 
     // MARK: - Implementación del protocolo ObjectObservable
     var objectWillChange: ObservableObjectPublisher {
-        
+
     }
-  
+
      // MARK: - Intents(s)
     func choose(card: MemoryGame<String>.Card) {
         //Enviar cambio al resto
         objectWillChange.send()
         model.choose(card: card);
     }
-    
-  
+
+
 }
 ```
 
 #### @Published
 
-El problema de la impelementacióñ eanterior es que hay que hacerlo manualmente y eso puede traer errores, entonces para evitarlo se usa la anotación @Published
+El problema de la implementación anterior es que hay que hacerlo manualmente y eso puede traer errores, entonces para evitarlo se usa la anotación @Published
 
-````swift
+```swift
 class EmojiMemoryGame: ObservableObject {
     @Published private var model:MemoryGame<String> = EmojiMemoryGame.createMemoryGame();
-  
-}
-    
 
-````
+}
+```
 
 - Cada vez que se envía un cambio, la vista se actualizará
 
@@ -80,14 +78,12 @@ class EmojiMemoryGame: ObservableObject {
 - Esta anotacion se implementa en el objeto que "recibirá los cambios"
 
 ```swift
-
-
 struct EmojiMemoryGameView: View {
     @ObservedObject var viewModel:EmojiMemoryGame;
-    
+
     var body: some View {
     }
-    
+
     }
 ```
 
@@ -103,50 +99,49 @@ struct EmojiMemoryGameView: View {
 
 ```swift
 protocol Moveable {
-	func move(by: Int)
-	var hasMoved: Bool {get}
-	var distanceFromStart: int {get set}
+    func move(by: Int)
+    var hasMoved: Bool {get}
+    var distanceFromStart: int {get set}
 }
 ```
 
 - Ahora cualquiera otro tipo puede implementar este protocolo llamado Moveable
 
-````swift
+```swift
 struct PortableThing: Moveable {
-	// Debe implementar las funciones declaradas en Moveable, move, hasMoved y distanceFromStart
+    // Debe implementar las funciones declaradas en Moveable, move, hasMoved y distanceFromStart
 }
-````
+```
 
 - Protocol inheritance: Permite herencia de protocolos entre sí
 
 ```swift
 protocol Vehicle:Moveable {
-	var passengerCount: Int
+    var passengerCount: Int
 }
 
 class Car:Vehicle {
-	// Debe implementar las funciones declaradas en Moveable (move, hasMoved y distanceFromStart) y del protocolo Vehicle (passengerCount)
+    // Debe implementar las funciones declaradas en Moveable (move, hasMoved y distanceFromStart) y del protocolo Vehicle (passengerCount)
 }
-
 ```
 
 - Los protocoloes son un tipo
 - Se pueden usar en cualquier otro tipo de dato
 
-````swift
+```swift
 var m:Movevable
 var car:Card = new Card()
 var portable:PortableThing = PortableThing()
 m = card // ok
 m = portable // ok
-````
+```
 
 - Car es diferente a PortableThing, pero se puede asignar, porque ambos implementan el protocolo Moveable
 - Pero no se puede hacer
 
-````swift
+```swift
 portable = car
-````
+```
 
 - Ya que portable es de tipo PortableThing y Card no es PortableThing. Son de diferente tipo
 - Swift revisa el tipo siempre
@@ -155,43 +150,43 @@ portable = car
 
 - Los protocolos son como constrains and gains
 
-````swift
+```swift
 struct Tesla: Vehicle {
-	//Tesla está obligado a implementar todo de Vehicle
+    //Tesla está obligado a implementar todo de Vehicle
 }
-````
+```
 
 - Se pueden agregar implementacióñ a un protocolo agregando extensiones
 
-````swift
+```swift
 extension Vehicle {
   func registerWithDMV() {
   /*Implementación aquí*/
   // Los nuevos Teslas y Vehicles ganarán esta nueva implementación
   }
 } 
-````
+```
 
 - Ahora todoslos Teslas y Vehicles pueden usar esta funciones
 
 - Usando esta forma, se pueden agregar **implementaciones por defecto**
 
-````swift
+```swift
 protocol Movevable {
-	func move(by: Int)
-	var hasMoved: Bool { get }
-	var distanceFromStart: Int { get set }
+    func move(by: Int)
+    var hasMoved: Bool { get }
+    var distanceFromStart: Int { get set }
 }
 
 extension Moveable {
-	var hasMoved: Bool { return distanceFromStart > 0 }
+    var hasMoved: Bool { return distanceFromStart > 0 }
 }
 
 struct ChessPiece: Moveable {
-  	// Sólo debe implementar move y distanceFromStar
-  	// No es necesario implementar hasMoved porque existe una extensión que tiene la implementación definida, pero podría
+      // Sólo debe implementar move y distanceFromStar
+      // No es necesario implementar hasMoved porque existe una extensión que tiene la implementación definida, pero podría
 } 
-````
+```
 
 - ChessPiece 
   - Sólo debe implementar move y distanceFromStar
@@ -202,22 +197,22 @@ struct ChessPiece: Moveable {
 
 - Se puede usar para agregar código a una clase o struct usando extension
 
-````swift
+```swift
 struct Boat {
-	/*...*/
+    /*...*/
 }
 extension Boat {
-	func sailAroungTheWorld() { /*...*/ }
+    func sailAroungTheWorld() { /*...*/ }
 }
-````
+```
 
 - Incluso se puede hacer que un tipo sea parte de una extensión
 
-````swift
+```swift
 extension Boat: Moveable {
-	// Debe implementar las funciones de Moveable como move y distanceFromStart
+    // Debe implementar las funciones de Moveable como move y distanceFromStart
 }
-````
+```
 
 - Ahora Boat es un Moveable
 
@@ -234,22 +229,22 @@ extension Boat: Moveable {
 
 - Don't care
 
-````swift
+```swift
 protocol Greatness {
-	func isGreaterThan(other:Self) -> Bool
+    func isGreaterThan(other:Self) -> Bool
 }
 // Al usar Self, hace referencia al tipo que implementa este protocol
-````
+```
 
 - Se pueden agregar una extension a un Array
 
-````swift
+```swift
 extension Array where Element: Greatness {
-	var greatest: Element {
-		return the greatest element calind isGreaterThan on each element	
-	}
+    var greatest: Element {
+        return the greatest element calind isGreaterThan on each element    
+    }
 }
-````
+```
 
 - Agregar extension a tipos ya definidos
 
@@ -269,7 +264,6 @@ extension Array where Element: Greatness {
 
 - ¿Como el espacio es distribuido en las vistas?
 - Simple
-
 1. Las vistas contenedores ofrecen espacio a las vistas interiores
 2. Vistas escogen que tamaño quieren tener
 3. Las vistas contenedoras posicionan las vistas en su interior
@@ -334,13 +328,12 @@ extension Array where Element: Greatness {
 
 ```swift
 HStack {
-	ForEach(viewModel.cards) { card in 
-		CardView(card: card).aspectRatio(2/3, 		contentMode: .fit)
-	}
+    ForEach(viewModel.cards) { card in 
+        CardView(card: card).aspectRatio(2/3, contentMode: .fit)
+    }
 }
 .foregroundColor(Color.orange)
 .padding(10)
-
 ```
 
 - La primera vista será a la creada con .padding(10)
@@ -360,21 +353,21 @@ HStack {
 
 ```swift
 var body: View {
-	GeometryReader { geometry in 
-	//...
-	}
+    GeometryReader { geometry in 
+    //...
+    }
 }
 ```
 
 - GeometryReader es un parámetro de tipo GeometryProxy
 
-````swift
+```swift
 struct GeometryProxy {
-	var size: CGSize
-	func frame(in: CoordinateSpace) -> CGRect
+    var size: CGSize
+    func frame(in: CoordinateSpace) -> CGRect
   var safeAreaInsets: EdgeInsets
 }
-````
+```
 
 - La variable size es el todo el espacio ofrecido a la vista por el contenedor.
 - Con ese size se podría modificar las propiedades de la vista hija, un Text por ejemplo, para cambiar el tamaño de la fuente, etc. 
@@ -410,7 +403,6 @@ struct GeometryProxy {
 ### Magic Numbers, Constants
 
 ```swift
-
 // MARK: - Drawing Constants
 // let para constantes
 let cornerRadius:CGFloat = 10.0;
@@ -419,4 +411,3 @@ func fontSize(for size: CGSize) -> CGFloat {
   return min(size.width, size.height) * 0.75;
 }
 ```
-

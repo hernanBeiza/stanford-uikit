@@ -11,7 +11,7 @@
   - @State
   - @Published
   - @ObserverdObject
-- Publishersß
+- Publishers
 
 ## Property Wrappers
 
@@ -24,15 +24,15 @@
   - Hacer que una vista se redibuje cuando un cambio publicado es detecado @ObservedObject
 - Syntactic Sugar
 
-````swift
+```swift
 @Published var emojiArt: EmojiArt = EmojiArt()
 
 // En realidad crea un struct
 struct Published {
-	var wrappedValue: EmojiArt
-	//Crea una variable del tipo que encapsula
-	var projectedValue: Publisher<EmojiArt, Never>
-  // Que proyecta los valores a otros
+  var wrappedValue: EmojiArt
+  //Crea una variable del tipo que encapsula
+  var projectedValue: Publisher<EmojiArt, Never>
+  // Que proyecta los valores a otros
 }
 // Y Swift disponibiliza esa variables
 var _emojiArt: Published = Published(wrappedValue: EmojiArt())
@@ -45,7 +45,7 @@ var emojiArt: EmojiArt {
 //Además hay otra variable dentro del structs Publisher es Published<EmojiArt,Never>
 //Never fails
 // Se puede acceder a esa variable $emojiArt
-````
+```
 
 - Los wrappers en los structs ejecutan algo cuando get o set el wrappedValue
 
@@ -54,7 +54,7 @@ var emojiArt: EmojiArt {
 - ¿Qué hace? 
   - Publica los cambios a través de projectedValue cuando el valor es seteado
   - $emojiArt el cuál es un Publisher
-  -  E invoca objectWillChange.send() en el objecto ObservableObject
+  - E invoca objectWillChange.send() en el objecto ObservableObject
 
 ### @State
 
@@ -106,14 +106,13 @@ var emojiArt: EmojiArt {
 
 #### Ejemplo de uso de bindings
 
-
 - Compartiendo valores a través de Bindings
 
-````swift
+```swift
 struct MyView: View {
-	@State var myString = "Hello"
+    @State var myString = "Hello"
   var body: View {
-  	OtherView(sharedText: $myString) 
+      OtherView(sharedText: $myString) 
   }
 }
 struct OtherView: View {
@@ -124,7 +123,7 @@ struct OtherView: View {
     Text(sharedText)
   }
 }
-````
+```
 
 - OtherView body es un texto que siempre  será el valor de myString de MyView
 - OtherView sharedText es un valor consolidado de la variable myString de MyView 
@@ -134,10 +133,10 @@ struct OtherView: View {
 
 - Se puede crear un vinculo hacia un valor contante con Binding.constant(value)
 
-````swift
+```swift
 OtherView(sharedText: .constant("ValorConstante"))
 // Siempre mostrará "ValorConstante" en la otra vista
-````
+```
 
 ### Bindings procesados
 
@@ -193,9 +192,9 @@ let myView = MyView(viewModel:theViewModel);
 - Como cualquier otro struct
 - Se pueden pasar valor para setear estos variables uasndo () al usar Property Wrapper
 
-````swift
+```swift
 @Environment(\.colorSheme) var colorSheme
-````
+```
 
 - Se puede obtener el valor de una variable del sistema \.colorScheme
 - Permite definir que variable de la instancia mirar en el struct EnvironmentValues
@@ -245,16 +244,16 @@ Publisher<Output, Failure>
 
 ##### Forma 1
 
-````swift
+```swift
 cancellable = myPublisher.shink(
-	receiveCompletion: { result in ... } 
+    receiveCompletion: { result in ... } 
   // result is a Completion<Failure> enum
-	receiveValue: { thingThePublisherPublishes in ... }
+    receiveValue: { thingThePublisherPublishes in ... }
 )
-````
+```
 
 - Si el Publisher no falla, entonces se puede omitir la implementacióñ de receiveCompletion
--  .sink retorna algo que puede ser cancellable
+- .sink retorna algo que puede ser cancellable
   - El valor implementa el protocolo Cancellable
 - Muy a menudo el tipo puede ser AnyCancellable, similar a AnyTransition
 - ¿Para qué?
@@ -267,11 +266,10 @@ cancellable = myPublisher.shink(
 
 ```swift
 .onReceive(published) { thingThePublisherPublishes in 
-	// reacer lo que sea con thingThePublisherPublishes
-	... 
+    // reacer lo que sea con thingThePublisherPublishes
+    ... 
 } 
 .onReceive automáticamente invalidará la vista (redibujando)
-
 ```
 
 #### ¿De dónde vienen los Publishers?

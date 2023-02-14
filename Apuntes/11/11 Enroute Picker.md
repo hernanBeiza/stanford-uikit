@@ -18,7 +18,7 @@
 
 - Vistas modal son .sheet 
 
-````swift
+```swift
 var body: some View {
   NavigationView {
     FlightList(flightSearch)
@@ -38,21 +38,19 @@ var filter: some View {
     FilterFlights(flightSearch: self.$flightSearch, isPresented: self.$showFilter)
   }
 }
-````
+```
 
 - Botones en la barra de navegación de un NavigationView
 
-
-
-````swift
+```swift
 var body: some View {
-	NavigationView {
+    NavigationView {
     Form {
       // Elementos UI acá
     }
-		.navigationBarTitle("Filter Flights")
-		.navigationBarItems(leading: cancel, trailing: done)
-		}
+        .navigationBarTitle("Filter Flights")
+        .navigationBarItems(leading: cancel, trailing: done)
+        }
 }
 // Vistas con un botón y la acción del botón
 var cancel: some View {
@@ -67,9 +65,7 @@ var done: some View {
     self.isPresented = false
   }
 }
-````
-
-
+```
 
 ### Picker
 
@@ -87,10 +83,9 @@ var done: some View {
 Picker("Destination", selection: $draft.destination) {
   ForEach(allAirports.codes, id: \.self) { airport in
   //.tag permite que al seleccionar un elemento se pase al Binding
-	Text("\(self.allAirports[airport]?.friendlyName ?? airport)").tag(airport)
-	}
+    Text("\(self.allAirports[airport]?.friendlyName ?? airport)").tag(airport)
+    }
 }
-
 ```
 
 ### Togle
@@ -104,4 +99,3 @@ Picker("Destination", selection: $draft.destination) {
 //Binding a la variable a cambiar
 Toggle(isOn: $draft.inTheAir) { Text("Enroute Only") }
 ```
-

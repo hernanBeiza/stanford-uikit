@@ -25,12 +25,12 @@
 - Controlar el acceso
 
 - El acceso se puede controlar a set o get
-
+  
   - Así se define una variable que puede set obtenida, pero no seteada desde otro lado
-
-  ````swift
+  
+  ```swift
   private(set) var cards:Array <Card>
-  ````
+  ```
 
 - También se puede definir a las variables computadas
 
@@ -44,24 +44,24 @@
 - EmptyView: Nada que mostrar
 - Se puede usar en funciones o read-only computed var
 
-`````swift
+```swift
 @ViewBUilder
 func front(ofCard: Card) -> some View {
-	RoundedRectangle(cornerRadiuus: 10);
+  RoundedRectangle(cornerRadiuus: 10);
   RoundedRectangle(cornerRadiuus: 10).stroke();
-	Text(card.content);
+  Text(card.content);
 }
 // Esto retornará un TupleView
-`````
+```
 
 - La anotación permite marcar un parámaetro que retornará una vista
 
-````swift
+```swift
 //Ejemplo en GeometryReader
 struct GeometryReader<Content> where Content: View {
-	init (@ViewBuilder content: @escaping (GeometryProxy) -> Content) { ...} 
+    init (@ViewBuilder content: @escaping (GeometryProxy) -> Content) { ...} 
 }
-````
+```
 
 - No hay forma de extraer las vistas hasta el momento
 - **El contenido de un @ViewBuilder es una lista de vistas**
@@ -89,11 +89,11 @@ struct GeometryReader<Content> where Content: View {
 
 - Protocolo shape tiene una función que implementa el cuerpo de la vista
 
-````swift
+```swift
 func path(in rect: CGRect) -> Path {
-	return a Path
+    return a Path
 }
-````
+```
 
 - 0,0 está en la punta superior izquierda
 - 
@@ -114,24 +114,24 @@ func path(in rect: CGRect) -> Path {
 
 ```swift
 protocol ViewModifier {
-	associatedType Content;
-	func body (content: Content) -> some view {
-		return //vista que representa la modificación de content
-	}
+    associatedType Content;
+    func body (content: Content) -> some view {
+        return //vista que representa la modificación de content
+    }
 }
 ```
 
 - Al llamar .modifier en la vista, el contenido, content, el contenido pasado a la función es la vista
 - Crea una nueva vista usando la vista pasada por parámetro
 
-````swift
+```swift
 Text("👻").modifier(Cardify(isFaceUp:true)); //Eventualmente .cardify(isFaceUp:true)
 
 struct Cardify: ViewModifier {
   // Argumentos, parámetros, del ViewModifier
   var isFaceUp: Bool
   func body(content: Content) -> some View {
-  	Zstack {
+      Zstack {
       if isFaceUp {
         RoundedRectangle(cornerRadius: 10).fillColor(Color.white);
         RoundedRectangle(cornerRadius: 10).stroke();
@@ -142,37 +142,36 @@ struct Cardify: ViewModifier {
     }
   }
 }
-````
+```
 
 #### ¿Cómo pasar de...?
 
-````swift
+```swift
 //Esto
 Text("👻").modifier(Cardify(isFaceUp:true)); 
 //A esto
 Text("👻").cardify(isFaceUp:true)); 
-
-````
+```
 
 - Simple, crear una extensión de View en el archivo que tiene la función del ViewModifier
 
-````swift
+```swift
 extension View {
   // Argumentos, parámetros, del ViewModifier
   func cardify(isFaceUp: Bool) -> some View {
     return self.modifier(Cardify(isFaceUp:isFaceUp));
   }
 }
-````
+```
 
 - Quedaría algo así
 
-````swift
+```swift
 import SwiftUI
 
 struct Cardify: ViewModifier {
     var isFaceUp:Bool;
-    
+
     func body(content: Content) -> some View {
         return ZStack {
             if isFaceUp {
@@ -184,7 +183,7 @@ struct Cardify: ViewModifier {
             }
         }
     }
- 
+
     private let cornerRadius:CGFloat = 10.0;
     private let edgeLineWidth:CGFloat = 3.0;
 }
@@ -194,5 +193,4 @@ extension View {
         return self.modifier(Cardify(isFaceUp: isFaceUp));
     }
 }
-````
-
+```

@@ -44,15 +44,15 @@
 - No es un tipo para vars. UIImage es esa var
 - Permite acceder a las imágenes en Assets.xcassets using:
 
-````swift
+```swift
 Image (_name: String);
-````
+```
 
 - Acceder imágenes del sistema
 
-````swift
+```swift
 Image(systemName: String);
-````
+```
 
 - Se puede controlar el tamaño de la imagen, .imageScale() viewModifier
 - Las imágenes del sistema se pueden usar como máscaras
@@ -63,9 +63,9 @@ Image(systemName: String);
 - Muy poderoso para representar imágenes
 - Múltiples formatos
 
-````swift
-Image(uiImage:)	
-````
+```swift
+Image(uiImage:)    
+```
 
 ## Multithreading
 
@@ -138,11 +138,11 @@ Image(uiImage:)
 
 - Hay dos formas básicas de hacerlo
 
-````swift
+```swift
 let queue = DispatchQueue.main or DispatchQueue.global(qos;)
 queue.async { /* Código a ejecutar en segundo plano */ }
 queue.sync { /* Código a ejecutar en primer plano */}
-````
+```
 
 - queue.sync { /* Código a ejecutar en primer plano */}
   - Bloquea esperando que el código sea tomado por la cola y completado
@@ -155,9 +155,9 @@ queue.sync { /* Código a ejecutar en primer plano */}
 
 ### Nesting
 
-````swift
+```swift
 DispatchQueue(global: .userInitiated).async {
-	//API Rest
+    //API Rest
   //No bloqueará la UI
   //En algún momento deberá actualizar la UI
   //Pero no se puede ejecutar el código directamente acá, porque está en otro hilo
@@ -165,22 +165,21 @@ DispatchQueue(global: .userInitiated).async {
     //Se actualiza la UI
   }
 }
-````
+```
 
 - Parece código sincrónico, pero no lo es
 - Si pasa mucho tiempo, hay que tenenr especial atención con lo que se hará sobre la UI para notificar
 
 ### Asynchronous API
 
-````swift
+```swift
 DispatchQueue.main.async {
-	//Background
+    //Background
 }
-````
+```
 
 - DispatchQueue.global(qo:) no se usa tanto como se piensa
 - Ya que muchas de las APIs de iOS están a un nivel superior, entonces automáti amente trabajan en una de las dos colas
 - URLSession
   - Obtiene data desde una URL, internet y luego la retorna cuando está lista
   - Pero de todas maneras , si se desea realizar algo sobre la UI, se debe llamar a DispatchQueue.main.async { } para actualizar la UI
-

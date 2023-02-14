@@ -22,34 +22,29 @@
 - Setting @Environiment Variables
 - .zIndex
 
-
-
 ## PopOver
 
 - También podría ser un sheet, con .sheet
 
-````swift
+```swift
 @State private var showPalleteEditor = false;
 
 .popover(isPresented: $showPalleteEditor, content: {
   PaletteEditor()
   .frame(minWidth: 300, minHeight: 500)
 })
-
-````
-
-
+```
 
 ### Forms
 
 - Agregan scroll a los inputs
 - También sirve para agrupar inputs de texto. Con un título
 
-````swift
+```swift
 //Agrega scrolls y títulos
 Form {
-	Section(header: Text("Palette Name")){
-		TextField("Palette Name", text:$paletteName, onEditingChanged: { began in                                                                  	if !began {
+    Section(header: Text("Palette Name")){
+        TextField("Palette Name", text:$paletteName, onEditingChanged: { began in                                                                      if !began {
       self.document.renamePalette(self.chosenPalette, to: self.paletteName)
                         }
                     })
@@ -59,15 +54,14 @@ Form {
                         if !began {
                             self.chosenPalette = self.document.addEmoji(self.emojisToAdd, toPalette: self.chosenPalette)
                             self.emojisToAdd = "";
-			}                                                                          		})
+            }                                                                                  })
   }
 }
-
-````
+```
 
 ### Lists y NavigationView!
 
-````swift
+```swift
 var body: some View {
   NavigationView {
     //TableView!
@@ -85,13 +79,11 @@ var body: some View {
     .navigationBarItems(leading: Button(action: {self.store.addDocument()},label: { Image(systemName: "plus").imageScale(.large)}))
   }
 }
-````
-
-
+```
 
 ### Alerts
 
-````swift
+```swift
 // NO se pueden poner dos alertas en el mismo elemento
 .alert(isPresented: self.$confirmBackgroundPaste){
   return Alert(
@@ -103,5 +95,4 @@ var body: some View {
     secondaryButton: .cancel()
   )
 }
-````
-
+```
